@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,12 +31,17 @@ class Room {
     String roomtype;
     boolean isbooked;
     String guestname;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    LocalDateTime check_in;
+    LocalDateTime check_out;
 
     public Room(int roomnumber, String roomtype) {
         this.roomnumber = roomnumber;
         this.roomtype = roomtype;
         this.isbooked = false;
         this.guestname = "";
+        this.check_in = null;
+        this.check_out = null;
     }
 
     public int getroomnumber() {
@@ -53,12 +60,22 @@ class Room {
         return guestname;
     }
 
+    public LocalDateTime getcheckin() {
+        return check_in;
+    }
+
+    public LocalDateTime getcheckout() {
+        return check_out;
+    }
+
     public void bookRoom(String guestname) {
         if (!isbooked) {
             this.isbooked = true;
             this.guestname = guestname;
+            this.check_in = LocalDateTime.now();
 
-            System.out.println("Room " + roomnumber + " is successfully booked for " + guestname);
+            System.out.println(
+                    "Room " + roomnumber + " is successfully booked for " + guestname + " at " + dtf.format(check_in));
         } else
             System.out.println("Room " + roomnumber + " is already booked.");
     }
@@ -66,8 +83,10 @@ class Room {
     public void freeRoom() {
         if (isbooked) {
             this.isbooked = false;
-            this.guestname = "";
+            // this.guestname = "";
+            this.check_out = LocalDateTime.now();
 
+            System.out.println("Room was free at " + dtf.format(check_out));
             System.out.println("Room " + roomnumber + " is now available.");
         } else
             System.out.println("Room " + roomnumber + " already free.");
@@ -88,7 +107,8 @@ public class Hotel_Management {
             System.out.println("3. Book Room");
             System.out.println("4. Free room");
             System.out.println("5. View All");
-            System.out.println("6. Exit");
+            System.out.println("6. Check-in/out details.");
+            System.out.println("7. Exit");
             System.out.println("Enter Your Choice: ");
             choice = sc.nextInt();
 
@@ -114,20 +134,25 @@ public class Hotel_Management {
                     break;
 
                 case 6:
+                    System.out.println("Details of Guests:");
+                    check_details();
+                    break;
+
+                case 7:
                     System.out.println("Exiting...............");
                     break;
 
                 default:
                     System.out.println("Not valid choice, please enter a valid choice.");
             }
-        } while (choice != 6);
+        } while (choice != 7);
     }
 
     private static void addhotel() {
         System.out.println("Enter Hotel name: ");
         String hotelname = sc.next();
 
-        if (checkhotelbyname(hotelname)) {
+        if (findhotelbyname(hotelname) == null) {
             hotels.add(new Hotel(hotelname));
             System.out.println("Hotel " + hotelname + " has been added.");
         } else
@@ -185,15 +210,11 @@ public class Hotel_Management {
             System.out.println("Enter type of room (Single/Double/Suite).");
             String roomtype = sc.next();
 
-            Room room = new Room(roomnumber, roomtype);
-
-            for (Room e : hotel.getRoom()) {
-                if (e.getroomnumber() != roomnumber) {
-                    hotel.addRoom(room);
-                    System.out.println("Room " + roomnumber + " (" + roomtype + ") has been added to " + hotelname);
-                } else
-                    System.out.println("Room already exist.");
-            }
+            if (findroombynumber(hotel, roomnumber) == null) {
+                hotel.addRoom(new Room(roomnumber, roomtype));
+                System.out.println("Room " + roomnumber + " (" + roomtype + ") has been added to " + hotelname);
+            } else
+                System.out.println("Room already exist.");
 
         } else
             System.out.println("Hotel not found.");
@@ -220,14 +241,14 @@ public class Hotel_Management {
         return null;
     }
 
-    private static boolean checkhotelbyname(String hotelname) {
-        for (Hotel hotel : hotels) {
-            if (hotel.getHotelName().equals(hotelname)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // private static boolean checkhotelbyname(String hotelname) {
+    // for (Hotel hotel : hotels) {
+    // if (hotel.getHotelName().equals(hotelname)) {
+    // return false;
+    // }
+    // }
+    // return true;
+    // }
 
     private static Room findroombynumber(Hotel hotel, int roomnumber) {
         for (Room room : hotel.getRoom()) {
@@ -237,11 +258,29 @@ public class Hotel_Management {
         return null;
     }
 
-    private static boolean checkroomnumber(Hotel hotel, int roomnumber) {
-        for (Room room : hotel.getRoom()) {
-            if (room.getroomnumber() == roomnumber)
-                return false;
+    // private static boolean checkroomnumber(Hotel hotel, int roomnumber) {
+    // for (Room room : hotel.getRoom()) {
+    // if (room.getroomnumber() == roomnumber)
+    // return false;
+    // }
+    // return true;
+    // }
+
+    private static void check_details() {
+        for (Hotel hotel : hotels) {
+            for (Room room : hotel.getRoom()) {
+                if (room.getcheckin() != null && room.getcheckout() != null)
+                    System.out.println("Guest name: " + room.getguestname() + " booked the room " + room.getroomnumber()
+                            + " at Hotel " + hotel.getHotelName() + " at " + room.getcheckin() + " and checked out at "
+                            + room.getcheckout());
+
+                else if (room.getcheckin() != null && room.getcheckout() == null)
+                    System.out.println("Guest name: " + room.getguestname() + " booked the room " + room.getroomnumber()
+                            + " at Hotel " + hotel.getHotelName() + " at " + room.getcheckin());
+
+                else if (!room.isbooked())
+                    System.out.println("Room " + room.getroomnumber() + " is available, You can book it.");
+            }
         }
-        return true;
     }
 }
