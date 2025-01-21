@@ -34,7 +34,5 @@ public class p4 {
         }
 
         System.out.println("TreeMap after reversing the keys: " + map);
-
-        System.out.println(map.lowerKey(i));
     }
 }
