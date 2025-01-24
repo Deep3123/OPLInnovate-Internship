@@ -3,6 +3,7 @@ package Prac_21_Jan.pra_3;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+@FunctionalInterface
 interface A {
     void caseConversion(ArrayList<String> arr);
 }

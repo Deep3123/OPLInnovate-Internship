@@ -2,6 +2,7 @@ package Prac_21_Jan.pra_7;
 
 import java.util.Scanner;
 
+@FunctionalInterface
 interface A {
     void fact(int n);
 }

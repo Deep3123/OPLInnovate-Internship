@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
+@FunctionalInterface
 interface A {
     void remove_duplicate(ArrayList<Integer> arr);
 }

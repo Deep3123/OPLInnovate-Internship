@@ -3,6 +3,7 @@ package Prac_21_Jan.pra_8;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+@FunctionalInterface
 interface A {
     void avg_len(ArrayList<String> arr);
 }

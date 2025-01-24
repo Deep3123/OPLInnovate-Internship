@@ -3,6 +3,7 @@ package Prac_21_Jan.pra_4;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+@FunctionalInterface
 interface A {
     void MinAndMax(ArrayList obj);
 }
