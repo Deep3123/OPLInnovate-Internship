@@ -1,12 +1,10 @@
-package com.car.management.exception.globalexception;
+package com.gym.management.exception;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -73,5 +71,26 @@ public class GlobalException {
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public ErrorResponse noResourceFoundException(NoResourceFoundException e) {
 		return new ErrorResponse("URL format is not matching, may be some parameters are null or empty.", 404);
+	}
+
+	@ExceptionHandler(value = java.lang.IllegalArgumentException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ErrorResponse ArgumentException(java.lang.IllegalArgumentException ex) {
+		return new ErrorResponse(
+				"Enter only valid gender value.....[MALE, FEMALE, OTHER] (It is type sensitive field, so type in capital.)",
+				400);
+	}
+
+	@ExceptionHandler(value = org.springframework.dao.DataIntegrityViolationException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ErrorResponse ArgumentExceptiogn(org.springframework.dao.DataIntegrityViolationException ex) {
+		return new ErrorResponse("Could not Accept Duplicate entry", 410);
+	}
+
+	@ExceptionHandler(value = Exception.class)
+	@ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+	public ErrorResponse exception(Exception e) {
+		return new ErrorResponse("Something went wrong with our servers, we are working on it, we will be back soon!!!",
+				500);
 	}
 }

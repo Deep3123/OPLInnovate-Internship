@@ -1,7 +1,6 @@
 package com.car.management.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,7 @@ import com.car.management.proxy.CarProxy;
 import com.car.management.service.CarService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @RestController
 public class CarController {
@@ -25,7 +25,7 @@ public class CarController {
 	}
 
 	@PostMapping("/getCarDetailsById/{id}")
-	public CarProxy getCarDetailsById(@Valid @PathVariable("id") Long id) {
+	public CarProxy getCarDetailsById(@PathVariable("id") @NotNull(message = "Id cannot be null or empty.") Long id) {
 		return carService.getCarDetailsById(id);
 	}
 
