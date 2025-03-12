@@ -1,11 +1,8 @@
 package com.ems.security.proxy;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,4 +29,6 @@ public class EmployeeProxy {
 	private Date createdAt;
 
 	private Date updatedAt;
+
+	private EmployeeImageProxy employeeImage;
 }

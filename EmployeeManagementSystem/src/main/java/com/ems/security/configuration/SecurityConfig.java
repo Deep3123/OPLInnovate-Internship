@@ -35,9 +35,13 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(c -> c.disable());
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/emp/save-employee", "/", "/emp/login").permitAll()
-				.requestMatchers("/emp/get-all-employee-Details").hasAnyAuthority("ADMIN").anyRequest()
-				.authenticated());
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/emp/save-employee", "/", "/emp/login", "/emp/save-employee-with-image",
+						"/emp/view/**")
+				.permitAll()
+				.requestMatchers("/emp/get-all-employee-Details", "/get-employee-details-page-wise/**",
+						"/get-sorted-employee-details-page-wise/**")
+				.hasAnyAuthority("ADMIN").anyRequest().authenticated());
 		http.formLogin(Customizer.withDefaults());
 		http.httpBasic(Customizer.withDefaults());
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

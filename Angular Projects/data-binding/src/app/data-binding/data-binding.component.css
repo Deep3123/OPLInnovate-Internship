@@ -1,0 +1,11 @@
+.bodystyle{
+    background-color: rgb(108, 1, 54);
+}
+
+.fontstyle{
+    color: aquamarine;
+    font-size: larger;
+    font-weight:bolder;
+    font-family: fantasy;
+    font-variant: normal;
+}

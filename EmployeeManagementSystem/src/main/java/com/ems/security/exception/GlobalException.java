@@ -59,6 +59,16 @@ public class GlobalException {
 		return map;
 	}
 
+	@ExceptionHandler(value = RuntimeException.class)
+	public Map<String, Object> exception(HttpServletRequest req, HttpServletResponse res, RuntimeException e) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("Error-Message: ", e.getMessage());
+		map.put("Error-Path: ", req.getServletPath());
+		map.put("Error-Class: ", e.getClass());
+		map.put("Error-Status_code: ", res.getStatus());
+		return map;
+	}
+
 	@ExceptionHandler(value = Exception.class)
 	public Map<String, Object> exception(HttpServletRequest req, HttpServletResponse res, Exception e) {
 		Map<String, Object> map = new HashMap<>();

@@ -29,22 +29,27 @@ public class JwtFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		String token = jwtService.getTokenFromRequest(request);
+		try {
+			String token = jwtService.getTokenFromRequest(request);
 
-		if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			token = token.substring(7);
-			String username = jwtService.extractUserName(token);
+			if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				token = token.substring(7);
+				String username = jwtService.extractUserName(token);
 
-			UserDetails user = emp.loadUserByUsername(username);
+				UserDetails user = emp.loadUserByUsername(username);
 
-			if (user != null && jwtService.validateToken(token, user)) {
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null,
-						user.getAuthorities());
-				auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				SecurityContextHolder.getContext().setAuthentication(auth);
+				if (user != null && jwtService.validateToken(token, user)) {
+					UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null,
+							user.getAuthorities());
+					auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(auth);
+
+				}
 
 			}
-
+		} catch (Throwable e) {
+//			System.out.println("Error Logs "+e.getMessage());
+//			throw e;
 		}
 		filterChain.doFilter(request, response);
 	}

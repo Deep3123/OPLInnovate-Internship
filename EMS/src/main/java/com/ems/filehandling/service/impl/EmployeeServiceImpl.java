@@ -494,9 +494,6 @@ public class EmployeeServiceImpl implements EmployeeServices {
 
 	@Override
 	public String saveEmployeeData(EmployeeProxy employeeProxy, List<MultipartFile> multipartFiles) {
-		if (Objects.isNull(employeeProxy))
-			return "Data is null or empty.";
-
 		StringBuilder result = new StringBuilder();
 
 		List<EmployeeProfileImage> profileImages = new ArrayList<>();
@@ -567,15 +564,15 @@ public class EmployeeServiceImpl implements EmployeeServices {
 		try {
 			workbook = new XSSFWorkbook(multipartFile.getInputStream());
 			Sheet sheet = workbook.createSheet("Entities");
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public String saveExcelDataIntoDatabase(MultipartFile multipartFile) {
 		// TODO Auto-generated method stub
